@@ -1,11 +1,6 @@
 <?php
 require_once "pdo.php";
 
-// Demand a GET parameter
-//if ( ! isset($_GET['name']) || strlen($_GET['name']) < 1  ) {
-//    die('Name parameter missing');
-//}
-
 // If the user requested logout go back to index.php
 if ( isset($_POST['logout']) ) {
    header('Location: index.php');
@@ -25,46 +20,64 @@ if ( isset($_POST['make']) && isset($_POST['year'])
      }
      else
      {
-    $sql = "INSERT INTO autos (make, year, mileage) 
-              VALUES (:mk, :yr, :mi)";
- 
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute(array(
-  ':mk' => htmlspecialchars($_POST['make']),
-  ':yr' => htmlspecialchars($_POST['year']),
-  ':mi' => htmlspecialchars($_POST['mileage'])));
+        try {
+            $conn = $pdo;
+            $mk = htmlspecialchars($_POST['make']);
+            $yr = htmlspecialchars($_POST['year']);
+            $mi= htmlspecialchars($_POST['mileage']);
+            $sql = "INSERT INTO autos (make, year, mileage) VALUES ('$mk', '$yr', '$mi')";
+            $conn->exec($sql);
+            echo "New record created successfully";
+          } catch(PDOException $e) {
+            echo $sql . "<br>" . $e->getMessage();
+          }
+          
+          $conn = null;
 
-  if ($stmt->execute()) { 
+
+
+
+
+  //  $sql = "INSERT INTO autos (make, year, mileage) 
+   //           VALUES (:mk, :yr, :mi)";
+ 
+  //  $stmt = $pdo->prepare($sql);
+  //  $stmt->execute(array(
+  //':mk' => htmlspecialchars($_POST['make']),
+ // ':yr' => htmlspecialchars($_POST['year']),
+ // ':mi' => htmlspecialchars($_POST['mileage'])));
+
+ // if ($stmt->execute()) { 
     // ok :-)
-    $count = $stmt->rowCount();
-    $successmess = "Record Inserted";
+ //   $count = $stmt->rowCount();
+ //   $successmess = "Record Inserted";
 //    echo 'Record Inserted';
-} else {
+//} else {
     // KO :-(
-    print_r($stmt->errorInfo());
-}
+  //  print_r($stmt->errorInfo());
+//}
     }
 }
 
-$stmt = $pdo->query("SELECT make, year, mileage FROM autos");
+$stmt = $pdo->query("SELECT make, year, mileage FROM autos where auto_id < 20");
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
-<html>
-<head>
-</head><body>
-<div style="margin-left:20%;">   
-<table border="1">
-<?php
+//<html>
+//<head>
+//</head><body>
+//<div style="margin-left:20%;">   
+//<table border="1">
+//<?php
 foreach ( $rows as $row ) {
     echo "<tr><td>";
-    echo($row['make']);
+   echo($row['make']);
+   echo("</td><td>");
+   echo($row['year']);
     echo("</td><td>");
-    echo($row['year']);
-    echo("</td><td>");
-    echo($row['mileage']);
-    echo("</td></tr>\n");                                                                                                                                                                                                     
+   echo($row['mileage']);
+   echo("</td></tr>\n");                                                                                                                                                                                                     
 }
 ?>
 </div>
