@@ -6,8 +6,8 @@ if ( isset($_POST['logout']) ) {
    header('Location: index.php');
     return;
 }
-$numErr = "";
-$successmess = "";
+//$numErr = "";
+//$successmess = "";
 
 if ( isset($_POST['make']) && isset($_POST['year']) 
      && isset($_POST['mileage'])) 
@@ -38,38 +38,21 @@ if ( isset($_POST['make']) && isset($_POST['year'])
 
 
 
-  //  $sql = "INSERT INTO autos (make, year, mileage) 
-   //           VALUES (:mk, :yr, :mi)";
- 
-  //  $stmt = $pdo->prepare($sql);
-  //  $stmt->execute(array(
-  //':mk' => htmlspecialchars($_POST['make']),
- // ':yr' => htmlspecialchars($_POST['year']),
- // ':mi' => htmlspecialchars($_POST['mileage'])));
-
- // if ($stmt->execute()) { 
-    // ok :-)
- //   $count = $stmt->rowCount();
- //   $successmess = "Record Inserted";
-//    echo 'Record Inserted';
-//} else {
-    // KO :-(
-  //  print_r($stmt->errorInfo());
-//}
+  
     }
 }
 
-$stmt = $pdo->query("SELECT make, year, mileage FROM autos where auto_id < 20");
+$stmt = $pdo->query("SELECT make, year, mileage FROM autos");
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
-//<html>
-//<head>
-//</head><body>
-//<div style="margin-left:20%;">   
-//<table border="1">
-//<?php
+<html>
+<head>
+</head><body>
+<div style="margin-left:20%;">   
+<table border="1">
+<?php
 foreach ( $rows as $row ) {
     echo "<tr><td>";
    echo($row['make']);
